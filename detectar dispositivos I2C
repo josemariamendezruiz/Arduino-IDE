@@ -1,0 +1,43 @@
+// CON ESTE CODIGO PODREMOS DETECTAR LOS MODULOS CONECTADOS AL BUS I2C Y CONOCER SU DIRECCIÓN PARA PODER ACCEDER A LOS MISMOS
+// UNA VEZ SUBIDO EL CODIGO A NUESTRA PLACA ARDUINO MINI, MICRO, UNO o MEGA, ABRIREMOS EN EL MENU SUPERIOR 
+// Herramientas  >>  Monitor Serie , SE NOS ABRIRA UNA VENTANA NUEVA DONDE SE MOSTRARAN LAS COMUNICACIONES CON NUESTRO ARDUINO
+// Y EN LA CUAL VEREMOS TODOS LOS DISPOSITIVOS CONECTADOS AL BUS DE COMUNICACIONES I2C, ES ACONSEJABLE HACERLO DE UNO EN UNO PARA CONOCER SU DIRECCIÓN
+// NUNCA PUEDE HABER DOS MÓDULOS CONECTADOS AL BUS I2C CON LA MISMA DIRECCIÓN.
+
+
+#include <Wire.h>
+
+void setup() {
+  Serial.begin (115200);
+  while (!Serial)
+  {
+  }
+
+  Serial.println ();
+  Serial.println ("I2C Escaneando BUS ...");
+  byte count = 0;
+ 
+  Wire.begin();
+  for (byte i = 1; i < 120; i++)
+  {
+    Wire.beginTransmission (i);
+    if (Wire.endTransmission () == 0)
+      {
+      Serial.print ("Dispostivo encontrado en la dirección: ");
+      Serial.print (i, DEC);
+      Serial.print (" (0x");
+      Serial.print (i, HEX);
+      Serial.println (")");
+      count++;
+      delay (1);
+      } 
+  } 
+  Serial.println ("Terminado.");
+  Serial.print ("Encontrado(s) ");
+  Serial.print (count, DEC);
+  Serial.println (" dispositivo(s) conetado(s).");
+} 
+
+void loop()
+{
+}
